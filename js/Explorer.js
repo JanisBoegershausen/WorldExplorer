@@ -1,48 +1,32 @@
 var settings = {
-  entityPath: "../Data/",
+  dataUrl: "https://janisboegershausen.github.io/WorldExplorer/data/",
 };
 
-var entities = [];
+var database;
 
 function setup() {
-  LoadAllEntities();
+  
 }
 
-function LoadAllEntities() {
-  entities = [];
-  var entityJsonFiles = [];
+// Load the database from the database.json file
+function LoadDatabase() {
 
-  var requestUrl = "https://api.github.com/repos/JanisBoegershausen/WorldExplorer/git/trees/master?recursive=1";
+  // Get path to json file
+  var databaseUrl = dataUrl + "database.json";
+
+  // Create and send the request to read the file
   var fileListRequest = new XMLHttpRequest();
-
-  fileListRequest.open("GET", requestUrl, true);
+  fileListRequest.open("GET", databaseUrl, true);
   fileListRequest.send(null);
 
-  var fileTree;
-
+  // Once the file was recieved, save the json data into the variable
   fileListRequest.onreadystatechange = function () {
     if (fileListRequest.readyState === 4 && fileListRequest.status === 200) {
-      fileTree = JSON.parse(fileListRequest.responseText).tree;
-
-      fileTree.forEach((fileEntry) => {
-        if (fileEntry.type == "blob" && fileEntry.path.substring(0, 14) == "data/entities/") {
-          entityJsonFiles.push(fileEntry);
-        }
-      });
-
-      entityJsonFiles.forEach((entityJsonFile) => {
-        var entityJsonRequest = new XMLHttpRequest();
-        entityJsonRequest.open("GET", "https://janisboegershausen.github.io/WorldExplorer/" + entityJsonFile.path, true);
-        entityJsonRequest.send(null);
-
-        entityJsonRequest.onreadystatechange = function () {
-          if (fileListRequest.readyState === 4 && fileListRequest.status === 200) {
-            entities.push(JSON.parse(fileListRequest.responseText));
-          }
-        };
-      });
-
-      console.log(entityJsonFiles);
+      database = JSON.parse(fileListRequest.responseText);
     }
-  };
+  }
+}
+
+function GetEntityById(id) {
+  return database[id];
 }
