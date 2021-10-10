@@ -1,3 +1,4 @@
 {
-	"ENTITY_TEST": "entities/test.json"
+	"NPC_JOHNTEST": "entities/npcs/NPC_JOHNTEST.json",
+	"RACE_HUMAN": "entities/races/RACE_HUMAN.json"
 }
