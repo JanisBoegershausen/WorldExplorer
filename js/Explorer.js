@@ -2,9 +2,16 @@ var settings = {
   dataUrl: "https://janisboegershausen.github.io/WorldExplorer/data/",
 };
 
+// Refferences
+var listParent;
+var header;
+
 var entities = {};
 
 function setup() {
+  header = document.getElementById("entity-name");
+  listParent = document.getElementById("entity-property-list");
+
   LoadEntityDatabase();
 }
 
@@ -43,6 +50,38 @@ function LoadEntityDatabase() {
   };
 }
 
+// Returns the entity with the given id if it exists in the database
 function GetEntityById(id) {
   return entities[id];
+}
+
+// Displays the properties of the given entity on screen
+function DisplayEntity(entity) {
+  // Set header to the entity name
+  header.innerHTML = entity.displayName;
+
+  // Get all property keys of the entity
+  var propertyKeys = Object.keys(entity);
+
+  // Delete all previous properties that are displayed on the page
+  listParent.childNodes.forEach(childNode => {
+    listParent.removeChild(childNode);
+  });
+
+  // Show all properties of the entity
+  propertyKeys.forEach((propertyKey) => {
+    console.log(propertyKey + ": " + entity[propertyKey]);
+    AddPropertyDisplayToPage(propertyKey, entity[propertyKey]);
+  });
+}
+
+// Adds a property (label: value) to the bottom of the property list
+function AddPropertyDisplayToPage(label, value) {
+  var div = document.createElement("div");
+  
+  // Add html code to the div
+  div.innerHTML = "<p>" + label + ": " + value + "</p>";
+
+  // Parent the created div under the list parent
+  listParent.appendChild(div);
 }
