@@ -55,6 +55,10 @@ function GetEntityById(id) {
   return entities[id];
 }
 
+function DisplayEntityById(entityId) {
+  DisplayEntity(GetEntityById(entityId));
+}
+
 // Displays the properties of the given entity on screen
 function DisplayEntity(entity) {
   // Set header to the entity name
@@ -64,9 +68,10 @@ function DisplayEntity(entity) {
   var propertyKeys = Object.keys(entity);
 
   // Delete all previous properties that are displayed on the page
-  listParent.childNodes.forEach(childNode => {
-    listParent.removeChild(childNode);
-  });
+  while(listParent.childNodes.length > 0) {
+    console.log(listParent.childNodes[0])
+    listParent.removeChild(listParent.childNodes[0]);
+  }
 
   // Show all properties of the entity
   propertyKeys.forEach((propertyKey) => {
@@ -77,10 +82,18 @@ function DisplayEntity(entity) {
 
 // Adds a property (label: value) to the bottom of the property list
 function AddPropertyDisplayToPage(label, value) {
+  // Create div with display:flex for horizontal layouting
   var div = document.createElement("div");
-  
-  // Add html code to the div
-  div.innerHTML = "<p" + (value[0] == "[" ? " onclick='LoadEntityDatabase(" + value.substring(1, value.length-1) + ")'" : "") + ">" + label + ": " + value + "</p>";
+  div.style = "display:flex"
+
+  // If the value is a link to an entity, add an onClick to display that entity
+  var isLinkToEntity = value[0] == "[";
+  var onClick = ` class="entity-link" onclick="DisplayEntityById('` + value.substring(1, value.length - 1) + `')"`;
+
+  // Generate the actuall innerHtml
+  var labelHtml = `<p style="width: 50%;">` + label + ": " +"</p>"
+  var valueHtml = `<p style="width: 50%;"` + (isLinkToEntity ? onClick : "") + ">" + value + "</p>"
+  div.innerHTML = labelHtml + valueHtml;
 
   // Parent the created div under the list parent
   listParent.appendChild(div);
