@@ -80,7 +80,7 @@ function AddPropertyDisplayToPage(label, value) {
   var div = document.createElement("div");
   
   // Add html code to the div
-  div.innerHTML = "<p>" + label + ": " + value + "</p>";
+  div.innerHTML = "<p" + (value[0] == "[" ? " onclick='LoadEntityDatabase(" + value.substring(1, value.length-1) + ")'" : "") + ">" + label + ": " + value + "</p>";
 
   // Parent the created div under the list parent
   listParent.appendChild(div);
