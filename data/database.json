@@ -1,4 +1,5 @@
 {
-	"NPC_JOHNTEST": "entities/npcs/NPC_JOHNTEST.json",
-	"RACE_HUMAN": "entities/races/RACE_HUMAN.json"
+	"NPC_JOHNBROOKS": "entities/npcs/NPC_JOHNBROOKS.json",
+	"RACE_HUMAN": "entities/races/RACE_HUMAN.json",
+	"LOCATION_RIVERSIDEINN": "entities/locations/LOCATION_RIVERSIDEINN.json"
 }
