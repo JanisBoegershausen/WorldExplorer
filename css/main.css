@@ -1,4 +1,20 @@
 .entity-link {
-    color: #569CCA;
-    cursor: pointer;
+  color: #569cca;
+  cursor: pointer;
+}
+
+#entity-search-bar {
+  position: absolute;
+  top: 2%;
+  right: 1%;
+  width: 20%;
+
+  font-size: 2vh;
+  margin-left: 10px;
+  margin-top: -10px;
+  margin-bottom: -10px;
+  padding-left: 10px;
+  background-color: #24262e;
+  color: white;
+  border-width: 0px;
 }

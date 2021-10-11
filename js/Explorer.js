@@ -68,8 +68,8 @@ function DisplayEntity(entity) {
   var propertyKeys = Object.keys(entity);
 
   // Delete all previous properties that are displayed on the page
-  while(listParent.childNodes.length > 0) {
-    console.log(listParent.childNodes[0])
+  while (listParent.childNodes.length > 0) {
+    console.log(listParent.childNodes[0]);
     listParent.removeChild(listParent.childNodes[0]);
   }
 
@@ -84,17 +84,37 @@ function DisplayEntity(entity) {
 function AddPropertyDisplayToPage(label, value) {
   // Create div with display:flex for horizontal layouting
   var div = document.createElement("div");
-  div.style = "display:flex"
+  div.style = "display:flex";
 
   // If the value is a link to an entity, add an onClick to display that entity
   var isLinkToEntity = value[0] == "[";
   var onClick = ` class="entity-link" onclick="DisplayEntityById('` + value.substring(1, value.length - 1) + `')"`;
 
   // Generate the actuall innerHtml
-  var labelHtml = `<p style="width: 50%;">` + label + ": " +"</p>"
-  var valueHtml = `<p style="width: 50%;"` + (isLinkToEntity ? onClick : "") + ">" + value + "</p>"
+  var labelHtml = `<p style="width: 50%;">` + label + ": " + "</p>";
+  var valueHtml = `<p style="width: 50%;"` + (isLinkToEntity ? onClick : "") + ">" + value + "</p>";
   div.innerHTML = labelHtml + valueHtml;
 
   // Parent the created div under the list parent
   listParent.appendChild(div);
+}
+
+// Called on keyDown of the search bar
+function HandleSearchBarChange(searchBarElement) {
+  if (event.key === "Enter") {
+    DisplayEntity(SearchEntity(searchBarElement.value));
+  }
+}
+
+// Returns an entity with an id that contains the searchstring
+function SearchEntity(searchString) {
+  // Get a list of all entity ids
+  var entityIds = Object.keys(entities);
+
+  // Check all entities and return the first that matches (will be changed later to return best match)
+  for (let i = 0; i < entityIds.length; i++) {
+    if (entityIds[i].toLowerCase().includes(searchString.toLowerCase()) == true) {
+      return GetEntityById(entityIds[i]);
+    }
+  }
 }
