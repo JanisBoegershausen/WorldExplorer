@@ -91,11 +91,12 @@ function AddPropertyDisplayToPage(label, value) {
 
   // If the value is a link to an entity, add an onClick to display that entity
   var isLinkToEntity = value[0] == "[";
-  var onClick = ` class="entity-link" onclick="DisplayEntityById('` + value.substring(1, value.length - 1) + `')"`;
+  var linkedEntityId = value.substring(1, value.length - 1);
+  var onClick = ` class="entity-link" onclick="DisplayEntityById('` + linkedEntityId + `')"`;
 
   // Generate the actuall innerHtml
   var labelHtml = `<p style="width: 50%;">` + label + ": " + "</p>";
-  var valueHtml = `<p style="width: 50%;"` + (isLinkToEntity ? onClick : "") + ">" + value + "</p>";
+  var valueHtml = `<p style="width: 50%;"` + (isLinkToEntity ? onClick : "") + ">" + (isLinkToEntity ? GetEntityById(linkedEntityId).displayName : value) + "</p>";
   div.innerHTML = labelHtml + valueHtml;
 
   // Parent the created div under the list parent
