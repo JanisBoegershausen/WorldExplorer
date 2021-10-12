@@ -62,8 +62,8 @@ function AddPropertyDisplayToPage(label, value) {
   var onClick = ` class="entity-link" onclick="DisplayEntityById('` + linkedEntityId + `')"`;
 
   // Generate the actuall innerHtml for the property entry
-  var labelHtml = `<p style="width: 50%;">` + label + ": " + "</p>";
-  var valueHtml = `<p style="width: 50%;"` + (isLinkToEntity ? onClick : "") + ">" + (isLinkToEntity ? GetEntityById(linkedEntityId).displayName : value) + "</p>";
+  var labelHtml = `<p style="width: 25%;">` + label.charAt(0).toUpperCase() + label.substring(1) + ": " + "</p>";
+  var valueHtml = `<p style="width: 75%;"` + (isLinkToEntity ? onClick : "") + ">" + (isLinkToEntity ? GetEntityById(linkedEntityId).displayName : value) + "</p>";
   div.innerHTML = labelHtml + valueHtml;
 
   // Parent the created div under the list parent
