@@ -56,16 +56,35 @@ function AddPropertyDisplayToPage(label, value) {
   var div = document.createElement("div");
   div.style = "display:flex";
 
-  // If the value is a link to an entity, add an onClick to display that entity
-  var isLinkToEntity = value[0] == "[";
-  var linkedEntityId = value.substring(1, value.length - 1);
-  var onClick = ` class="entity-link" onclick="DisplayEntityById('` + linkedEntityId + `')"`;
-
   // Generate the actuall innerHtml for the property entry
   var labelHtml = `<p style="width: 25%;">` + label.charAt(0).toUpperCase() + label.substring(1) + ": " + "</p>";
-  var valueHtml = `<p style="width: 75%;"` + (isLinkToEntity ? onClick : "") + ">" + (isLinkToEntity ? GetEntityById(linkedEntityId).displayName : value) + "</p>";
+  var valueHtml = `<p style="width: 75%;">` + ParsePropertyValueToHtml(value) + "</p>";
   div.innerHTML = labelHtml + valueHtml;
 
   // Parent the created div under the list parent
   listParent.appendChild(div);
+}
+
+// Returns html code for the given property value, propperly including links
+function ParsePropertyValueToHtml(valueString) {
+  var htmlString = valueString;
+
+  var i = 0; // Limit to avoid infinit loop in case of an error
+  while(htmlString.includes("[") && i < 100) {
+    i += 1;
+
+    // Extract needed data and indecies from string
+    var startIndex = htmlString.search('\\[');
+    var endIndex = htmlString.search('\\]');
+    var linkId = htmlString.substring(startIndex + 1, endIndex);
+
+    // Generate html
+    var onClickEventHtml = ` class="entity-link" onclick="DisplayEntityById('` + linkId + `')"`;
+    var linkHtml = `<a` + onClickEventHtml + `>` + GetEntityById(linkId).displayName + `</a>`
+
+    // Place html into the output string
+    htmlString = htmlString.substring(0, startIndex) + linkHtml + htmlString.substring(endIndex + 1);
+  }
+
+  return htmlString;
 }

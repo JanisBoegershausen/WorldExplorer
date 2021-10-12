@@ -1,6 +1,7 @@
 {
 	"id": "LOCATION_RIVERSIDEINN",
 	"displayName": "Riverside Inn",
+	"description": "The Riverside Inn is a small inn laying close to a crossing over the [LOCATION_MOONLIGHTRIVER]. It is commonly used by traverlers.",
 	"owner": "[NPC_JOHNBROOKS]",
-	"nearby": "Moonlight River"
+	"nearby": "[LOCATION_MOONLIGHTRIVER]"
 }
