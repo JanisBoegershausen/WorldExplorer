@@ -1,7 +1,7 @@
 {
 	"id": "NPC_JOHNBROOKS",
 	"displayName": "John Brooks",
-	"description": "John Brooks is a human ownling a small inn near the Moonlight River.",
+	"description": "John Brooks is a human owning a small inn near the Moonlight River.",
 	"race": "[RACE_HUMAN]",
 	"home": "[LOCATION_RIVERSIDEINN]"
 }

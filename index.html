@@ -10,6 +10,10 @@
 <body>
   <returnHomeButton onclick="window.open('https://janisboegershausen.github.io/');"></returnHomeButton>
   <headline id="entity-name"> None </headline>
-  <input type="search" id="entity-search-bar" onkeydown="HandleSearchBarChange(this)">
+  <div id="search-area">
+    <input type="search" id="entity-search-bar" onkeyup="HandleSearchBarChange(this)" />
+    <div id="search-suggestion-parent" style="width: 100%;">
+    </div>
+  </div>
   <textSection id="entity-property-list"></textSection>
 </body>

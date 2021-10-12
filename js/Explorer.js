@@ -44,6 +44,9 @@ function LoadEntityDatabase() {
           if (entityRequest.readyState === 4 && entityRequest.status === 200) {
             entities[entityId] = JSON.parse(entityRequest.responseText);
           }
+
+          // Show all existing entites below the searchbar for testing
+          UpdateSearchPreview("");
         };
       });
     }
@@ -99,22 +102,54 @@ function AddPropertyDisplayToPage(label, value) {
   listParent.appendChild(div);
 }
 
-// Called on keyDown of the search bar
+// Called on keyUp of the search bar
 function HandleSearchBarChange(searchBarElement) {
   if (event.key === "Enter") {
-    DisplayEntity(SearchEntity(searchBarElement.value));
+    DisplayEntity(SearchEntities(searchBarElement.value)[0]);
+  } else {
+    UpdateSearchPreview(searchBarElement.value);
   }
 }
 
-// Returns an entity with an id that contains the searchstring
-function SearchEntity(searchString) {
+// Returns all entities with an id that contains the searchstring
+function SearchEntities(searchString) {
   // Get a list of all entity ids
   var entityIds = Object.keys(entities);
+  var matching = [];
 
-  // Check all entities and return the first that matches (will be changed later to return best match)
+  // Check all entities and remember all that match the searchstring
   for (let i = 0; i < entityIds.length; i++) {
     if (entityIds[i].toLowerCase().includes(searchString.toLowerCase()) == true) {
-      return GetEntityById(entityIds[i]);
+      matching.push(GetEntityById(entityIds[i]));
     }
   }
+
+  // TODO: Sort by simmilarity
+  return matching;
+}
+
+function UpdateSearchPreview(searchString) {
+  // Get the string typed into the search bar
+  var searchSuggestionParent = document.getElementById("search-suggestion-parent");
+
+  // Delete all previous suggestions that are displayed
+  while (searchSuggestionParent.childNodes.length > 0) {
+    searchSuggestionParent.removeChild(searchSuggestionParent.childNodes[0]);
+  }
+
+  // Get all matching search results which will me suggested
+  var suggestions = SearchEntities(searchString ? searchString : "");
+
+  // Show all suggestions below the searchbar
+  suggestions.forEach((sugestion) => {
+    // Create div that holds the suggestion
+    var div = document.createElement("div");
+    div.style = "display:flex";
+
+    // Generate the actuall innerHtml that shows the suggestion and loads it onClick
+    div.innerHTML = `<searchSuggestion onclick="DisplayEntityById('` + sugestion.id + `')">` + sugestion.id + "</searchSugestion>";
+
+    // Parent the created div under the list parent
+    searchSuggestionParent.appendChild(div);
+  });
 }
