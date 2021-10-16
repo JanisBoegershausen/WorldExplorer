@@ -9,6 +9,7 @@ var header;
 var entities = {};
 
 function setup() {
+  noCanvas();
   // Get refferences to dom elements
   header = document.getElementById("entity-name");
   listParent = document.getElementById("entity-property-list");
