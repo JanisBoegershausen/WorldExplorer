@@ -1,6 +1,8 @@
 {
+	"NPC_GORMIRHAMMERFIST": "entities/npcs/NPC_GORMIRHAMMERFIST.json",
 	"NPC_JOHNBROOKS": "entities/npcs/NPC_JOHNBROOKS.json",
 	"RACE_HUMAN": "entities/races/RACE_HUMAN.json",
+	"RACE_DWARF": "entities/races/RACE_DWARF.json",
 	"LOCATION_RIVERSIDEINN": "entities/locations/LOCATION_RIVERSIDEINN.json",
 	"LOCATION_GRAYSEA": "entities/locations/LOCATION_GRAYSEA.json",
 	"LOCATION_MOONLIGHTRIVER": "entities/locations/LOCATION_MOONLIGHTRIVER.json"
