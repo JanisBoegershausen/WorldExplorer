@@ -15,6 +15,7 @@ function LoadEntityFromUrl(entityId, urlToJson) {
   entityRequest.onreadystatechange = function () {
     if (entityRequest.readyState === 4 && entityRequest.status === 200) {
       entities[entityId] = JSON.parse(entityRequest.responseText);
+      entities[entityId].id = entityId;
     }
 
     // Show all existing entites below the searchbar for testing

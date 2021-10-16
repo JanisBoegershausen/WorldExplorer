@@ -1,5 +1,4 @@
 {
-	"id": "NPC_JOHNBROOKS",
 	"displayName": "John Brooks",
 	"description": "John Brooks is a human owning the [LOCATION_RIVERSIDEINN] near the [LOCATION_MOONLIGHTRIVER].",
 	"race": "[RACE_HUMAN]",
