@@ -14,8 +14,8 @@ function LoadEntityFromUrl(entityId, urlToJson) {
   // Once the file was recieved, save the json data into the entites variable
   entityRequest.onreadystatechange = function () {
     if (entityRequest.readyState === 4 && entityRequest.status === 200) {
-      entities[entityId] = JSON.parse(entityRequest.responseText);
-      entities[entityId].id = entityId;
+      unusedWrittenEntities[entityId] = JSON.parse(entityRequest.responseText);
+      unusedWrittenEntities[entityId].id = entityId;
     }
 
     // Show all existing entites below the searchbar for testing
@@ -24,7 +24,7 @@ function LoadEntityFromUrl(entityId, urlToJson) {
 }
 
 // Load all entities from the database.json file and store the result in the entities dict
-function LoadEntityDatabase() {
+function LoadHandwrittenEntityDatabase() {
   // Get url to the database.json file, which is a dict of all ids and their relative file paths
   var databaseUrl = settings.dataUrl + "database.json";
 

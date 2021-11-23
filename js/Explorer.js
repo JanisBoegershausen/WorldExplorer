@@ -1,12 +1,21 @@
 var settings = {
   dataUrl: "https://janisboegershausen.github.io/WorldExplorer/data/",
+  hiddenKeys: ["_hasGeneratedChildren", "id", "seed"],
+  validChildTypes: {
+    "planet": ["continent"],
+    "star system": ["planet"]
+  }
 };
 
 // Refferences
 var listParent;
 var header;
 
+// List of all entities currently in the world
 var entities = {};
+
+// List of handwritten entities, that have not yet been placed in the world
+var unusedWrittenEntities = {};
 
 function setup() {
   noCanvas();
@@ -14,7 +23,10 @@ function setup() {
   header = document.getElementById("entity-name");
   listParent = document.getElementById("entity-property-list");
 
-  LoadEntityDatabase();
+  LoadHandwrittenEntityDatabase();
+  
+  var starterLocation = GenerateEntityByType("planet", GetFullyRandomSeed(), null, null);
+  DisplayEntity(starterLocation);
 }
 
 // Returns the entity with the given id if it exists in the database
@@ -32,6 +44,13 @@ function DisplayEntityById(entityId) {
 
 // Displays the properties of the given entity on screen
 function DisplayEntity(entity) {
+  if(entity["_hasGeneratedChildren"] == false) {
+    GenerateChildren(entity);
+  }
+  if(entity["parent"] == null) {
+    GenerateParent(entity);
+  }
+
   // Set header to the entity name
   header.innerHTML = entity.displayName;
 
@@ -40,14 +59,14 @@ function DisplayEntity(entity) {
 
   // Delete all previous properties that are displayed on the page
   while (listParent.childNodes.length > 0) {
-    console.log(listParent.childNodes[0]);
     listParent.removeChild(listParent.childNodes[0]);
   }
 
   // Show all properties of the entity
   propertyKeys.forEach((propertyKey) => {
-    console.log(propertyKey + ": " + entity[propertyKey]);
-    AddPropertyDisplayToPage(propertyKey, entity[propertyKey]);
+    if(!settings.hiddenKeys.includes(propertyKey)) {
+      AddPropertyDisplayToPage(propertyKey, entity[propertyKey]);
+    }
   });
 }
 
@@ -62,13 +81,16 @@ function AddPropertyDisplayToPage(label, value) {
   var valueHtml = `<p style="width: 75%;">` + ParsePropertyValueToHtml(value) + "</p>";
   div.innerHTML = labelHtml + valueHtml;
 
+  // Ignore default mouse events to prevent accidental selection of buttons
+  div.addEventListener('mousedown', function(e){ e.preventDefault(); }, false);
+
   // Parent the created div under the list parent
   listParent.appendChild(div);
 }
 
 // Returns html code for the given property value, propperly including links
 function ParsePropertyValueToHtml(valueString) {
-  var htmlString = valueString;
+  var htmlString = String(valueString);
 
   var i = 0; // Limit to avoid infinit loop in case of an error
   while(htmlString.includes("[") && i < 100) {
@@ -81,6 +103,7 @@ function ParsePropertyValueToHtml(valueString) {
 
     // Generate html
     var onClickEventHtml = ` class="entity-link" onclick="DisplayEntityById('` + linkId + `')"`;
+    print(linkId);
     var linkHtml = `<a` + onClickEventHtml + `>` + GetEntityById(linkId).displayName + `</a>`
 
     // Place html into the output string
