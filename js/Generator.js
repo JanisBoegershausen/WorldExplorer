@@ -69,7 +69,7 @@ function GeneratePlanet(seed, parent, children) {
         id: "PLANET_" + seed,
         seed: seed,
         type: "planet",
-        displayName: "AE-C" + seed,
+        displayName: GetRandomWord(2).toUpperCase() + "-" + GetRandomWord(1) + seed,
         parent: parent,
         children: children,
         _hasGeneratedChildren: false
@@ -83,7 +83,7 @@ function GenerateStarSystem(seed, parent, children) {
         id: "STARSYSTEM_" + seed,
         seed: seed,
         type: "star system",
-        displayName: "System " + seed,
+        displayName: "System - " + GetRandomWord(2) + seed,
         parent: parent,
         children: children,
         _hasGeneratedChildren: false
@@ -98,7 +98,7 @@ function GenerateContinent(seed, parent, children) {
         id: "CONTINENT_" + seed,
         seed: seed,
         type: "continent",
-        displayName: "Continent " + seed,
+        displayName: GetRandomWord(random(4, 10)),
         parent: parent,
         children: children,
         _hasGeneratedChildren: false
