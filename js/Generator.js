@@ -53,14 +53,18 @@ function GenerateChildren(entity) {
 }
 
 function GenerateEntityByType(type, seed, parent, children) {
-    if(type == "planet") {
-        return GeneratePlanet(seed, parent, children);
-    } else if(type == "star system") {
-        return GenerateStarSystem(seed, parent, children);
-    } else if(type == "continent") {
-        return GenerateContinent(seed, parent, children);
-    } else {
-        console.error("The enetity type " + type + " does not exist!");
+    switch (type) {
+        case "Planet":
+            return GeneratePlanet(seed, parent, children);
+        case "Star System":
+            return GenerateStarSystem(seed, parent, children);
+        case "Continent":
+            return GenerateContinent(seed, parent, children);
+        case "Country":
+            return GenerateCountry(seed, parent, children);
+        default:
+            console.error("The enetity type " + type + " does not exist!");
+            break;
     }
 }
 
@@ -68,7 +72,7 @@ function GeneratePlanet(seed, parent, children) {
     var planet = {
         id: "PLANET_" + seed,
         seed: seed,
-        type: "planet",
+        type: "Planet",
         displayName: GetRandomWord(2).toUpperCase() + "-" + GetRandomWord(1) + seed,
         parent: parent,
         children: children,
@@ -82,7 +86,7 @@ function GenerateStarSystem(seed, parent, children) {
     var entity = {
         id: "STARSYSTEM_" + seed,
         seed: seed,
-        type: "star system",
+        type: "Star System",
         displayName: "System - " + GetRandomWord(2) + seed,
         parent: parent,
         children: children,
@@ -97,7 +101,22 @@ function GenerateContinent(seed, parent, children) {
     var entity = {
         id: "CONTINENT_" + seed,
         seed: seed,
-        type: "continent",
+        type: "Continent",
+        displayName: GetRandomWord(random(4, 10)),
+        parent: parent,
+        children: children,
+        _hasGeneratedChildren: false
+    }
+
+    entities[entity.id] = entity;
+    return entity;
+}
+
+function GenerateCountry(seed, parent, children) {
+    var entity = {
+        id: "COUNTRY_" + seed,
+        seed: seed,
+        type: "Country",
         displayName: GetRandomWord(random(4, 10)),
         parent: parent,
         children: children,

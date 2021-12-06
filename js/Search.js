@@ -16,11 +16,13 @@ function SearchEntities(searchString) {
   var matching = [];
 
   // Check all entities and remember all that match the searchstring
-  for (let i = 0; i < entityIds.length; i++) {
+  if (searchString != "") {
+    for (let i = 0; i < entityIds.length; i++) {
       var matchingId = entityIds[i].toLowerCase().includes(searchString);
       var matchingDisplayName = GetEntityById(entityIds[i]).displayName.toLowerCase().includes(searchString);
-    if (matchingId || matchingDisplayName) {
-      matching.push(GetEntityById(entityIds[i]));
+      if (matchingId || matchingDisplayName) {
+        matching.push(GetEntityById(entityIds[i]));
+      }
     }
   }
 
@@ -52,4 +54,14 @@ function UpdateSearchPreview(searchString) {
     // Parent the created div under the list parent
     searchSuggestionParent.appendChild(div);
   });
+}
+
+function ClearSearchBarSuggestions() {
+  // Get the string typed into the search bar
+  var searchSuggestionParent = document.getElementById("search-suggestion-parent");
+
+  // Delete all previous suggestions that are displayed
+  while (searchSuggestionParent.childNodes.length > 0) {
+    searchSuggestionParent.removeChild(searchSuggestionParent.childNodes[0]);
+  }
 }

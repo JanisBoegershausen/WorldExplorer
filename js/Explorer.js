@@ -2,8 +2,9 @@ var settings = {
   dataUrl: "https://janisboegershausen.github.io/WorldExplorer/data/",
   hiddenKeys: ["_hasGeneratedChildren", "id", "seed"],
   validChildTypes: {
-    "planet": ["continent"],
-    "star system": ["planet"]
+    "Star System": ["Planet"],
+    "Planet": ["Continent"],
+    "Continent": ["Country"],
   }
 };
 
@@ -17,6 +18,9 @@ var entities = {};
 // List of handwritten entities, that have not yet been placed in the world
 var unusedWrittenEntities = {};
 
+// The currently displayed entity by id
+var currentEntityid;
+
 function setup() {
   noCanvas();
   // Get refferences to dom elements
@@ -24,13 +28,21 @@ function setup() {
   listParent = document.getElementById("entity-property-list");
 
   LoadHandwrittenEntityDatabase();
+  InitializeDrawer();
   
-  var starterLocation = GenerateEntityByType("planet", GetFullyRandomSeed(), null, null);
+  var starterLocation = GenerateEntityByType("Planet", GetFullyRandomSeed(), null, null);
   DisplayEntity(starterLocation);
+  
+  ClearSearchBarSuggestions();
 }
 
-// Returns the entity with the given id if it exists in the database
+function draw() {
+  DrawEntity(GetEntityById(currentEntityid));
+}
+
+// Returns the entity with the given id if it exists in the database. Igonred "[" and "]".
 function GetEntityById(id) {
+  id = id.replace("[", "").replace("]", "");
   return entities[id];
 }
 
@@ -44,6 +56,8 @@ function DisplayEntityById(entityId) {
 
 // Displays the properties of the given entity on screen
 function DisplayEntity(entity) {
+  currentEntityid = entity.id;
+
   if(entity["_hasGeneratedChildren"] == false) {
     GenerateChildren(entity);
   }
@@ -74,11 +88,11 @@ function DisplayEntity(entity) {
 function AddPropertyDisplayToPage(label, value) {
   // Create div with display:flex for horizontal layouting
   var div = document.createElement("div");
-  div.style = "display:flex";
+  div.style = "display:flex;";
 
   // Generate the actuall innerHtml for the property entry
   var labelHtml = `<p style="width: 25%;">` + label.charAt(0).toUpperCase() + label.substring(1) + ": " + "</p>";
-  var valueHtml = `<p style="width: 75%;">` + ParsePropertyValueToHtml(value) + "</p>";
+  var valueHtml = `<p style="width: 75%; display:flex; flex-wrap:wrap;">` + ParsePropertyValueToHtml(String(value)) + "</p>";
   div.innerHTML = labelHtml + valueHtml;
 
   // Ignore default mouse events to prevent accidental selection of buttons
@@ -90,7 +104,7 @@ function AddPropertyDisplayToPage(label, value) {
 
 // Returns html code for the given property value, propperly including links
 function ParsePropertyValueToHtml(valueString) {
-  var htmlString = String(valueString);
+  var htmlString = valueString;
 
   var i = 0; // Limit to avoid infinit loop in case of an error
   while(htmlString.includes("[") && i < 100) {
@@ -103,7 +117,6 @@ function ParsePropertyValueToHtml(valueString) {
 
     // Generate html
     var onClickEventHtml = ` class="entity-link" onclick="DisplayEntityById('` + linkId + `')"`;
-    print(linkId);
     var linkHtml = `<a` + onClickEventHtml + `>` + GetEntityById(linkId).displayName + `</a>`
 
     // Place html into the output string
