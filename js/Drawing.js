@@ -38,8 +38,9 @@ function DrawStarSystem(system) {
     background(5, 5, 10);
 
     // Draw Sun
+    var sunDiameter = 50;
     fill(255, 215, 0);
-    circle(width/2, height/2, 50, 50);
+    circle(width/2, height/2, sunDiameter, sunDiameter);
 
     // Draw children
     var i = 0;
@@ -47,17 +48,31 @@ function DrawStarSystem(system) {
         var child = GetEntityById(childId);
         switch (child.type) {
             case "Planet":
-                // Draw continent
+                // Choose random position and size
+                var orbitAngle = SeededRandom(child.seed + 3) * 2 * PI;
+                var orbitDistance = SeededRandom(child.seed + 4) * maxDiameter * 0.5;
+                var planetDiameter = SeededRandom(child.seed + 6) * maxDiameter * 0.1 + 5;
+
+                // Prevent plantes from intersecting sun
+                while(orbitDistance - planetDiameter < sunDiameter) {orbitDistance++; planetDiameter--;}
+
+                // Calculate position
+                var positionX = (width / 2) + cos(orbitAngle) * orbitDistance;
+                var positionY = (height / 2) + sin(orbitAngle) * orbitDistance;
+
+                // Draw planet
                 noStroke();
                 fill(SeededRandom(child.seed) * 255, SeededRandom(child.seed + 1) * 255, SeededRandom(child.seed + 2) * 255, 255);
-                var positionRandom = SeededRandom(child.seed + 3) * 2 * PI;
-                var positionX = (width / 2) + maxDiameter * 0.4 * cos(positionRandom) * SeededRandom(child.seed + 4);
-                var positionY = (height / 2) + maxDiameter * 0.4 * sin(positionRandom) * SeededRandom(child.seed + 5);
-                var diameter = SeededRandom(child.seed + 6) * maxDiameter * 0.1 + 5;
-                ellipse(positionX, positionY, diameter, diameter)
+                ellipse(positionX, positionY, planetDiameter, planetDiameter)
 
-                if (abs(positionX - mouseX) < diameter / 2 && abs(positionY - mouseY) < diameter / 2) {
-                    // Draw label
+                // Draw orbit line
+                noFill();
+                stroke(255, 255, 255, 50)
+                strokeWeight(1);
+                ellipse(width/2, height/2, orbitDistance*2, orbitDistance*2);
+
+                // Draw label when hovered
+                if (abs(positionX - mouseX) < planetDiameter / 2 && abs(positionY - mouseY) < planetDiameter / 2) {
                     fill(255);
                     stroke(0);
                     strokeWeight(2);
@@ -104,7 +119,7 @@ function DrawPlanet(planet) {
     planet.children.forEach(childId => {
         var child = GetEntityById(childId);
         switch (child.type) {
-            case "Continent":
+            case "Landmass":
                 // Draw continent
                 noStroke();
                 fill(SeededRandom(child.seed) * 255, SeededRandom(child.seed + 1) * 255, SeededRandom(child.seed + 2) * 255, 255);
@@ -125,7 +140,6 @@ function DrawPlanet(planet) {
                     text(child.displayName, positionX, positionY);
                 }
                 break;
-
             default:
                 break;
         }

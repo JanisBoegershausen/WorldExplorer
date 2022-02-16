@@ -3,8 +3,11 @@ var settings = {
   hiddenKeys: ["_hasGeneratedChildren", "id", "seed"],
   validChildTypes: {
     "Star System": ["Planet"],
-    "Planet": ["Continent"],
-    "Continent": ["Country"],
+    "Planet": ["Landmass"],
+    "Landmass": ["Settlement"],
+    "Settlement": ["District"],
+    "District": ["Building"],
+    "Building": ["Person", "Object"],
   }
 };
 
@@ -91,8 +94,8 @@ function AddPropertyDisplayToPage(label, value) {
   div.style = "display:flex;";
 
   // Generate the actuall innerHtml for the property entry
-  var labelHtml = `<p style="width: 25%;">` + label.charAt(0).toUpperCase() + label.substring(1) + ": " + "</p>";
-  var valueHtml = `<p style="width: 75%; display:flex; flex-wrap:wrap;">` + ParsePropertyValueToHtml(String(value)) + "</p>";
+  var labelHtml = `<p style="width: 30%;">` + label.charAt(0).toUpperCase() + label.substring(1) + ": " + "</p>";
+  var valueHtml = `<p style="width: 70%; display:flex; flex-wrap:wrap;">` + ParsePropertyValueToHtml(String(value)) + "</p>";
   div.innerHTML = labelHtml + valueHtml;
 
   // Ignore default mouse events to prevent accidental selection of buttons
