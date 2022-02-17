@@ -5,8 +5,7 @@ var settings = {
     "Star System": ["Planet"],
     "Planet": ["Landmass"],
     "Landmass": ["Settlement"],
-    "Settlement": ["District"],
-    "District": ["Building"],
+    "Settlement": ["Building"],
     "Building": ["Person", "Object"],
   }
 };
@@ -110,7 +109,7 @@ function ParsePropertyValueToHtml(valueString) {
   var htmlString = valueString;
 
   var i = 0; // Limit to avoid infinit loop in case of an error
-  while(htmlString.includes("[") && i < 100) {
+  while(htmlString.includes("[") && i < 500) {
     i += 1;
 
     // Extract needed data and indecies from string
